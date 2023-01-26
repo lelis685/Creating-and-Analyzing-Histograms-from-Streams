@@ -1,4 +1,4 @@
-package org.paumard.streams.model;
+package br.com.poc.model;
 
 public class City {
 
