@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -64,6 +65,38 @@ public class ComputeStatistics {
 
 		System.out.println("Map size = " + citiesPerState.size());
 
+        List<City> cityOfUtah = citiesPerState.get("Utah");
+        System.out.println(cityOfUtah);
+
+
+        Map<String, Long> numberOfCitiesPerState = cities.stream()
+                .collect(
+                        Collectors.groupingBy(
+                                city -> city.getState(), Collectors.counting()
+                        )
+                );
+
+        System.out.println("cities in Utah" + numberOfCitiesPerState.get("Utah"));
+
+        Map.Entry<String, Long> stateMostCities = numberOfCitiesPerState.entrySet().stream()
+                .max(Comparator.comparing(Map.Entry::getValue))
+                .orElseThrow();
+
+        System.out.println("stateMostCities " + stateMostCities);
+
+        Integer populationUtah = citiesPerState.get("Utah").stream()
+                .collect(Collectors.summingInt(City::getPopulation));
+
+        System.out.println("population of Utah " + populationUtah);
+
+        Map<String, Integer> populationOfCitiesPerState = cities.stream()
+                .collect(
+                        Collectors.groupingBy(
+                                City::getState, Collectors.summingInt(City::getPopulation)
+                        )
+                );
+
+        System.out.println(populationOfCitiesPerState);
 
     }
 }
